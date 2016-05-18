@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/activity_horizontal_margin"
     tools:context="com.chocosawse.kotlindemo.MainActivity">
 
     <LinearLayout
+        android:layout_margin="@dimen/activity_horizontal_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -20,7 +20,7 @@
 
             <EditText
                 android:id="@+id/chars"
-                android:text="123456"
+                android:text="\@#$% "
                 android:hint="@string/name_goes_here"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -40,19 +40,28 @@
             android:orientation="horizontal">
 
             <Button
+                android:layout_margin="8dp"
                 android:id="@+id/reverse"
+                android:textColor="#ffffff"
+                android:background="?colorPrimary"
                 android:text="@string/reverse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <Button
+                android:layout_margin="8dp"
                 android:id="@+id/clear"
+                android:textColor="#ffffff"
+                android:background="?colorPrimary"
                 android:text="@string/clear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <Button
+                android:layout_margin="8dp"
                 android:id="@+id/render"
+                android:textColor="#ffffff"
+                android:background="?colorPrimary"
                 android:text="@string/render"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -75,6 +84,13 @@
                 android:id="@+id/db"
                 android:layout_margin="@dimen/activity_horizontal_margin"
                 android:background="@drawable/dickbutt"
+                android:layout_width="32dp"
+                android:layout_height="32dp" />
+
+            <Button
+                android:id="@+id/kotlin"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:background="@drawable/kotlin"
                 android:layout_width="32dp"
                 android:layout_height="32dp" />
         </LinearLayout>

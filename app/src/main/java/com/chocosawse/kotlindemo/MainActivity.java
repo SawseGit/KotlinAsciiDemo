@@ -16,12 +16,14 @@ public class MainActivity extends AppCompatActivity {
     private Button mRender;
     private Button mDogeButton;
     private Button mDickButtButton;
+    private Button mKotlinButton;
     private EditText mCharET;
     private EditText mCompressionET;
     private OptionsView mOptions;
     private AsciiView mAsciiView;
     private Bitmap mDogeBitmap;
     private Bitmap mDickButtBitmap;
+    private Bitmap mKotlinBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         mOptions = new OptionsViewImpl((ViewGroup) findViewById(R.id.options));
         mDogeBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.doge);
         mDickButtBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.dickbutt);
+        mKotlinBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.kotlin);
         mOptions.setBitmap(mDogeBitmap);
         mReverseButton = (Button) findViewById(R.id.reverse);
         mClearButton = (Button) findViewById(R.id.clear);
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         mCompressionET = (EditText) findViewById(R.id.compression);
         mDogeButton = (Button) findViewById(R.id.doge);
         mDickButtButton = (Button) findViewById(R.id.db);
+        mKotlinButton = (Button) findViewById(R.id.kotlin);
 
         if (mAsciiView != null) {
             mAsciiView.setOptions(mOptions);
@@ -96,6 +100,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mOptions.setBitmap(mDickButtBitmap);
+                refresh();
+            }
+        });
+
+        mKotlinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOptions.setBitmap(mKotlinBitmap);
                 refresh();
             }
         });
