@@ -6,8 +6,12 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by Steven Anyanwu on 5/17/16.
@@ -20,8 +24,8 @@ public class AsciiView extends View {
     private Bitmap mAsciiBitmap;
     private Canvas mCanvas;
     private Paint mPaint;
+    private List<Character> mChars;
     private boolean mHasInitialized = false;
-    private int mTextSize = 10;
 
     public AsciiView(Context context) {
         super(context);
@@ -54,7 +58,8 @@ public class AsciiView extends View {
     private void init() {
         mPaint = new Paint();
         mPaint.setColor(Color.BLACK);
-        mPaint.setTextSize(mTextSize);
+        mPaint.setAntiAlias(true);
+        mPaint.setTextSize(10);
     }
 
     public void refresh() {
@@ -71,29 +76,67 @@ public class AsciiView extends View {
     }
 
     public void drawAscii() {
-        int L = 0;
-        int px = 0;
-        int r, g, b;
         float s = getHeight() / mScaledBitmap.getHeight();
+        mChars = getSortedChars();
         mPaint.setTextSize(s);
         mCanvas.drawColor(Color.WHITE);
         for (int y = 0; y < mScaledBitmap.getHeight(); y++) {
             for (int x = 0; x < mScaledBitmap.getWidth(); x++) {
-                px = mScaledBitmap.getPixel(x, y);
-                r = (px >> 16) & 0xFF;
-                g = (px >> 8) & 0xFF;
-                b = px & 0xFF;
-                L = (r + g + b)/ 3;
-                char c = getChar(L);
+                char c = getChar(mChars, getLumFromPixel(mScaledBitmap.getPixel(x, y)));
                 mCanvas.drawText("" + c, x * s, y * s, mPaint);
             }
         }
     }
 
-    public char getChar(int lum) {
+    public List<Character> getSortedChars() {
+        ArrayList<Character> chars = new ArrayList<>();
+        for (char c: mOptions.getCharacters().toCharArray()) {
+            chars.add(c);
+        }
+        Collections.sort(chars, new LuminanceComparator(mPaint.getTextSize()));
+        return chars;
+    }
+
+    int r, g, b;
+    public int getLumFromPixel(int px) {
+        r = (px >> 16) & 0xFF;
+        g = (px >> 8) & 0xFF;
+        b = px & 0xFF;
+        return (r + g + b)/ 3;
+    }
+
+    public char getChar(List<Character> chars, int lum) {
         int len = mOptions.getCharacters().length();
-        int step = 256 / len;
-        return mOptions.getCharacters().charAt(Math.min(len - 1, lum / step));
+        if (len > 0) {
+            int step = 256 / len;
+            return chars.get(Math.min(len - 1, lum / step));
+        }
+        return ' ';
+    }
+
+    private class LuminanceComparator implements Comparator<Character> {
+        private Bitmap mCharBitmap;
+        private Bitmap mScaledCharBitmap;
+        private Canvas mCharCanvas;
+
+        public LuminanceComparator(float textSize) {
+            mCharBitmap = Bitmap.createBitmap((int) textSize, (int) textSize, Bitmap.Config.RGB_565);
+            mCharCanvas = new Canvas(mCharBitmap);
+        }
+
+        public Integer getLumFromChar(char c) {
+            mCharCanvas.drawColor(Color.WHITE);
+            mCharCanvas.drawText("" + c, 0, 0, mPaint);
+            mScaledCharBitmap = Bitmap.createScaledBitmap(mCharBitmap, 1, 1, true);
+            int lum = getLumFromPixel(mScaledCharBitmap.getPixel(0, 0));
+            mScaledCharBitmap.recycle();
+            return lum;
+        }
+
+        @Override
+        public int compare(Character lhs, Character rhs) {
+            return getLumFromChar(lhs).compareTo(getLumFromChar(rhs));
+        }
     }
 
     @Override
