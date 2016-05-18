@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">KotlinDemo</string>
+    <string name="name_goes_here">Name goes here</string>
+    <string name="reverse">Reverse</string>
+    <string name="clear">Clear</string>
+    <string name="pollute">Pollute</string>
+    <string name="compression_goes_here">Compression goes here</string>
+    <string name="render">Render</string>
+</resources>
