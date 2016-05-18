@@ -21,6 +21,7 @@ public class AsciiView extends View {
     private Canvas mCanvas;
     private Paint mPaint;
     private boolean mHasInitialized = false;
+    private int mTextSize = 10;
 
     public AsciiView(Context context) {
         super(context);
@@ -53,6 +54,7 @@ public class AsciiView extends View {
     private void init() {
         mPaint = new Paint();
         mPaint.setColor(Color.BLACK);
+        mPaint.setTextSize(mTextSize);
     }
 
     public void refresh() {
@@ -73,7 +75,7 @@ public class AsciiView extends View {
         int px = 0;
         int r, g, b;
         float s = getHeight() / mScaledBitmap.getHeight();
-        Log.d("Scale", "" + s);
+        mPaint.setTextSize(s);
         mCanvas.drawColor(Color.WHITE);
         for (int y = 0; y < mScaledBitmap.getHeight(); y++) {
             for (int x = 0; x < mScaledBitmap.getWidth(); x++) {
